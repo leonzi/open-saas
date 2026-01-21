@@ -8,7 +8,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y curl ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sSL https://get.wasp.sh/installer.sh | sh
+RUN curl -sSL https://get.wasp.sh/installer.sh | sh -s -- -v 0.21.0
 ENV PATH="/root/.local/bin:${PATH}"
 
 COPY . .
