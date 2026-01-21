@@ -22,7 +22,6 @@ RUN wasp build
 # Install server deps
 WORKDIR /app/template/app/.wasp/build/server
 RUN npm install --no-audit --no-fund
-RUN npx prisma generate
 
 # =========================
 # Runtime stage
