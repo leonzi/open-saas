@@ -1,7 +1,7 @@
 # =========================
 # Builder stage
 # =========================
-FROM node:20-bookworm AS builder
+FROM node:22-bookworm AS builder
 
 WORKDIR /app
 
@@ -38,7 +38,7 @@ RUN npx prisma generate
 # =========================
 # Runtime stage
 # =========================
-FROM node:20-bookworm AS runtime
+FROM node:22-bookworm AS runtime
 
 WORKDIR /app
 ENV NODE_ENV=production
