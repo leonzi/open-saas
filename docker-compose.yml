@@ -20,16 +20,15 @@ services:
     build:
       context: .
       args:
-        REACT_APP_API_URL: http://YOUR_SERVER_IP:3001
+        REACT_APP_API_URL: http://152.53.46.229:3001
     container_name: opensaas-app
     ports:
       - "3000:3000"
       - "3001:3001"
     environment:
       DATABASE_URL: postgresql://opensaas:opensaas@db:5432/opensaas
-      # Wasp requires these in non-localhost environments
-      WASP_SERVER_URL: http://localhost:3001
-      WASP_WEB_CLIENT_URL: http://localhost:3000
+      WASP_SERVER_URL: http://152.53.46.229:3001
+      WASP_WEB_CLIENT_URL: http://152.53.46.229:3000
       # Dummy Stripe keys - replace with real ones when needed
       STRIPE_API_KEY: sk_test_dummy_key_for_local_dev
       STRIPE_WEBHOOK_SECRET: whsec_dummy_for_local_dev

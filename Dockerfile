@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y curl ca-certificates \
 RUN curl -sSL https://get.wasp.sh/installer.sh | sh -s -- -v 0.20.1 \
   && ln -s /root/.local/bin/wasp /usr/local/bin/wasp
 
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
 COPY . .
 RUN chmod +x /app/entrypoint.sh
 
