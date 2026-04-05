@@ -5,8 +5,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y curl ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sSL https://get.wasp.sh/installer.sh | sh -s -- -v 0.20.1
-ENV PATH="/root/.local/bin:${PATH}"
+RUN curl -sSL https://get.wasp.sh/installer.sh | sh -s -- -v 0.20.1 \
+  && ln -s /root/.local/bin/wasp /usr/local/bin/wasp
 
 COPY . .
 WORKDIR /app/template/app
@@ -17,4 +17,4 @@ ENV PORT=3000
 EXPOSE 3000
 EXPOSE 3001
 
-CMD ["bash", "-lc", "wasp start --host 0.0.0.0 --port ${PORT}"]
+CMD ["bash", "-c", "wasp start --host 0.0.0.0 --port ${PORT}"]
