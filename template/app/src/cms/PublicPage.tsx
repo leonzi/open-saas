@@ -2,8 +2,8 @@ import { useQuery, getPageBySlug } from 'wasp/client/operations'
 import { useParams } from 'react-router-dom'
 
 export default function PublicPage() {
-  const { slug } = useParams<{ slug: string }>()
-  const { data: page, isLoading } = useQuery(getPageBySlug, { slug })
+  const { slug = '' } = useParams<{ slug: string }>()
+  const { data: page, isLoading } = useQuery(getPageBySlug, { slug }, { enabled: !!slug })
 
   if (isLoading) {
     return (
