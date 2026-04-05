@@ -9,6 +9,8 @@ RUN curl -sSL https://get.wasp.sh/installer.sh | sh -s -- -v 0.20.1 \
   && ln -s /root/.local/bin/wasp /usr/local/bin/wasp
 
 COPY . .
+RUN chmod +x /app/entrypoint.sh
+
 WORKDIR /app/template/app
 
 ENV NODE_ENV=development
@@ -17,4 +19,4 @@ ENV PORT=3000
 EXPOSE 3000
 EXPOSE 3001
 
-CMD ["bash", "-c", "wasp start --host 0.0.0.0 --port ${PORT}"]
+ENTRYPOINT ["/app/entrypoint.sh"]
