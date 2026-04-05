@@ -5,7 +5,7 @@ import {
   createPage,
   updatePage,
 } from 'wasp/client/operations'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -13,13 +13,12 @@ import DefaultLayout from '../admin/layout/DefaultLayout'
 import { Button } from '../client/components/ui/button'
 import { ArrowLeft, Bold, Italic, List, ListOrdered, Heading2, Heading3 } from 'lucide-react'
 
-const isNew = (id: string) => id === 'new'
-
 export default function AdminPageEditPage({ user }: { user: AuthUser }) {
-  const { id } = useParams<{ id: string }>()
-  const history = useHistory()
+  const { id = 'new' } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const isNew = id === 'new'
 
-  const { data: existing } = useQuery(getPageById, { id }, { enabled: !isNew(id) })
+  const { data: existing } = useQuery(getPageById, { id }, { enabled: !isNew })
 
   const [title, setTitle] = useState('')
   const [slug, setSlug] = useState('')
@@ -32,8 +31,7 @@ export default function AdminPageEditPage({ user }: { user: AuthUser }) {
     content: '',
     editorProps: {
       attributes: {
-        class:
-          'prose dark:prose-invert max-w-none min-h-[300px] p-4 focus:outline-none',
+        class: 'prose dark:prose-invert max-w-none min-h-[300px] p-4 focus:outline-none',
       },
     },
   })
@@ -56,7 +54,7 @@ export default function AdminPageEditPage({ user }: { user: AuthUser }) {
 
   function handleTitleChange(value: string) {
     setTitle(value)
-    if (isNew(id)) setSlug(autoSlug(value))
+    if (isNew) setSlug(autoSlug(value))
   }
 
   async function handleSave() {
@@ -65,12 +63,12 @@ export default function AdminPageEditPage({ user }: { user: AuthUser }) {
     setError('')
     try {
       const content = editor?.getHTML() ?? ''
-      if (isNew(id)) {
+      if (isNew) {
         await createPage({ title, slug, content, isPublished })
       } else {
         await updatePage({ id, title, slug, content, isPublished })
       }
-      history.push('/admin/pages')
+      navigate('/admin/pages')
     } catch (e: any) {
       setError(e.message ?? 'Save failed')
     } finally {
@@ -82,14 +80,13 @@ export default function AdminPageEditPage({ user }: { user: AuthUser }) {
     <DefaultLayout user={user}>
       <div className='mx-auto max-w-4xl'>
         <div className='mb-6 flex items-center gap-3'>
-          <Button variant='ghost' size='sm' onClick={() => history.push('/admin/pages')}>
+          <Button variant='ghost' size='sm' onClick={() => navigate('/admin/pages')}>
             <ArrowLeft className='h-4 w-4' />
           </Button>
-          <h1 className='text-2xl font-bold'>{isNew(id) ? 'New Page' : 'Edit Page'}</h1>
+          <h1 className='text-2xl font-bold'>{isNew ? 'New Page' : 'Edit Page'}</h1>
         </div>
 
         <div className='space-y-4'>
-          {/* Title */}
           <div>
             <label className='mb-1 block text-sm font-medium'>Title</label>
             <input
@@ -100,7 +97,6 @@ export default function AdminPageEditPage({ user }: { user: AuthUser }) {
             />
           </div>
 
-          {/* Slug */}
           <div>
             <label className='mb-1 block text-sm font-medium'>
               Slug <span className='text-muted-foreground font-normal'>(URL: /p/your-slug)</span>
@@ -113,11 +109,9 @@ export default function AdminPageEditPage({ user }: { user: AuthUser }) {
             />
           </div>
 
-          {/* Editor */}
           <div>
             <label className='mb-1 block text-sm font-medium'>Content</label>
             <div className='overflow-hidden rounded-md border'>
-              {/* Toolbar */}
               <div className='flex gap-1 border-b bg-muted/50 p-2'>
                 <ToolbarButton
                   onClick={() => editor?.chain().focus().toggleBold().run()}
@@ -168,7 +162,6 @@ export default function AdminPageEditPage({ user }: { user: AuthUser }) {
             </div>
           </div>
 
-          {/* Published */}
           <div className='flex items-center gap-3'>
             <input
               id='published'
@@ -188,7 +181,7 @@ export default function AdminPageEditPage({ user }: { user: AuthUser }) {
             <Button onClick={handleSave} disabled={saving}>
               {saving ? 'Saving...' : 'Save'}
             </Button>
-            <Button variant='outline' onClick={() => history.push('/admin/pages')}>
+            <Button variant='outline' onClick={() => navigate('/admin/pages')}>
               Cancel
             </Button>
           </div>

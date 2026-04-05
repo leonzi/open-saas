@@ -1,13 +1,13 @@
 import { type AuthUser } from 'wasp/auth'
 import { useQuery, getPages, deletePage } from 'wasp/client/operations'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import DefaultLayout from '../admin/layout/DefaultLayout'
 import { Button } from '../client/components/ui/button'
 import { Trash2, Pencil, Plus, Globe, EyeOff } from 'lucide-react'
 
 export default function AdminPagesPage({ user }: { user: AuthUser }) {
   const { data: pages, isLoading } = useQuery(getPages)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   async function handleDelete(id: string, title: string) {
     if (!confirm(`Delete page "${title}"?`)) return
@@ -19,7 +19,7 @@ export default function AdminPagesPage({ user }: { user: AuthUser }) {
       <div className='mx-auto max-w-4xl'>
         <div className='mb-6 flex items-center justify-between'>
           <h1 className='text-2xl font-bold'>Pages</h1>
-          <Button onClick={() => history.push('/admin/pages/new')}>
+          <Button onClick={() => navigate('/admin/pages/new')}>
             <Plus className='mr-2 h-4 w-4' />
             New Page
           </Button>
@@ -33,7 +33,7 @@ export default function AdminPagesPage({ user }: { user: AuthUser }) {
             <Button
               className='mt-4'
               variant='outline'
-              onClick={() => history.push('/admin/pages/new')}
+              onClick={() => navigate('/admin/pages/new')}
             >
               Create your first page
             </Button>
@@ -66,7 +66,7 @@ export default function AdminPagesPage({ user }: { user: AuthUser }) {
                   <Button
                     size='sm'
                     variant='ghost'
-                    onClick={() => history.push(`/admin/pages/${page.id}`)}
+                    onClick={() => navigate(`/admin/pages/${page.id}`)}
                   >
                     <Pencil className='h-4 w-4' />
                   </Button>
