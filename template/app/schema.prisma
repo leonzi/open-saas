@@ -26,6 +26,7 @@ model User {
   contactFormMessages       ContactFormMessage[]
   tasks                     Task[]
   files                     File[]
+  pages                     Page[]
 }
 
 model GptResponse {
@@ -96,6 +97,18 @@ model Logs {
 
   message                  String
   level                    String
+}
+
+model Page {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  slug        String   @unique
+  title       String
+  content     String
+  isPublished Boolean  @default(false)
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    String
 }
 
 model ContactFormMessage {

@@ -304,6 +304,55 @@ page NotFoundPage {
 }
 //#endregion
 
+//#region CMS Pages
+route AdminPagesRoute { path: "/admin/pages", to: AdminPagesPage }
+page AdminPagesPage {
+  authRequired: true,
+  component: import AdminPagesPage from "@src/cms/AdminPagesPage"
+}
+
+route AdminPageEditRoute { path: "/admin/pages/:id", to: AdminPageEditPage }
+page AdminPageEditPage {
+  authRequired: true,
+  component: import AdminPageEditPage from "@src/cms/AdminPageEditPage"
+}
+
+route PublicPageRoute { path: "/p/:slug", to: PublicPage }
+page PublicPage {
+  component: import PublicPage from "@src/cms/PublicPage"
+}
+
+query getPages {
+  fn: import { getPages } from "@src/cms/operations",
+  entities: [Page]
+}
+
+query getPageBySlug {
+  fn: import { getPageBySlug } from "@src/cms/operations",
+  entities: [Page]
+}
+
+query getPageById {
+  fn: import { getPageById } from "@src/cms/operations",
+  entities: [Page]
+}
+
+action createPage {
+  fn: import { createPage } from "@src/cms/operations",
+  entities: [Page]
+}
+
+action updatePage {
+  fn: import { updatePage } from "@src/cms/operations",
+  entities: [Page]
+}
+
+action deletePage {
+  fn: import { deletePage } from "@src/cms/operations",
+  entities: [Page]
+}
+//#endregion
+
 //#region Contact Form Messages
 // TODO:
 // add functionality to allow users to send messages to admin
