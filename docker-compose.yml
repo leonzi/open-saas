@@ -24,6 +24,16 @@ services:
       - "3001:3001"
     environment:
       DATABASE_URL: postgresql://opensaas:opensaas@db:5432/opensaas
+      # Wasp requires these in non-localhost environments
+      WASP_SERVER_URL: http://localhost:3001
+      WASP_WEB_CLIENT_URL: http://localhost:3000
+      # Dummy Stripe keys - replace with real ones when needed
+      STRIPE_API_KEY: sk_test_dummy_key_for_local_dev
+      STRIPE_WEBHOOK_SECRET: whsec_dummy_for_local_dev
+      PAYMENTS_HOBBY_SUBSCRIPTION_PLAN_ID: price_dummy
+      PAYMENTS_PRO_SUBSCRIPTION_PLAN_ID: price_dummy
+      PAYMENTS_CREDITS_10_PLAN_ID: price_dummy
+      ADMIN_EMAILS: admin@localhost.dev
     env_file:
       - ./template/app/.env.server
     depends_on:
