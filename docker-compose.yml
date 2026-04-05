@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: opensaas-db
+    environment:
+      POSTGRES_USER: opensaas
+      POSTGRES_PASSWORD: opensaas
+      POSTGRES_DB: opensaas
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opensaas"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: opensaas-app
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://opensaas:opensaas@db:5432/opensaas
+    env_file:
+      - ./template/app/.env.server
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
