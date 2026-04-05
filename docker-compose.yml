@@ -17,7 +17,10 @@ services:
       retries: 10
 
   app:
-    build: .
+    build:
+      context: .
+      args:
+        REACT_APP_API_URL: http://YOUR_SERVER_IP:3001
     container_name: opensaas-app
     ports:
       - "3000:3000"
