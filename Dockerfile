@@ -14,7 +14,6 @@ RUN chmod +x /app/entrypoint.sh
 WORKDIR /app/template/app
 
 ENV NODE_ENV=development
-ENV PORT=3000
 
 EXPOSE 3000
 EXPOSE 3001
